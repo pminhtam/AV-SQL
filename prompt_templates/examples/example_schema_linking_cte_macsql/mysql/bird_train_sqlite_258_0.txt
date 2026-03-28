@@ -1,0 +1,79 @@
+Example:
+###
+【Database Schema】
+DATABASE_NAME : retail_complains . Table: state
+  Column: StateCode (Type: text, Description: StateCode)
+  Column: State (Type: text, Description: State)
+  Column: Region (Type: text, Description: Region)
+  Primary Key: StateCode
+  Foreign Key: district.state_abbrev -> state.StateCode
+
+DATABASE_NAME : retail_complains . Table: district
+  Column: district_id (Type: integer, Description: district id)
+  Column: city (Type: text, Description: city)
+  Column: state_abbrev (Type: text, Description: state_abbrev)
+  Column: division (Type: text, Description: division)
+  Primary Key: district_id
+  Foreign Key: client.district_id -> district.district_id; district.state_abbrev -> state.StateCode; reviews.district_id -> district.district_id
+
+DATABASE_NAME : retail_complains . Table: client
+  Column: client_id (Type: text, Description: client id)
+  Column: sex (Type: text, Description: sex)
+  Column: day (Type: integer, Description: day)
+  Column: month (Type: integer, Description: month)
+  Column: year (Type: integer, Description: year)
+  Column: age (Type: integer, Description: age)
+  Column: social (Type: text, Description: social)
+  Column: first (Type: text, Description: first)
+  Column: middle (Type: text, Description: middle)
+  Column: last (Type: text, Description: last)
+  Column: phone (Type: text, Description: phone)
+  Column: email (Type: text, Description: email)
+  Column: address_1 (Type: text, Description: address_1)
+  Column: address_2 (Type: text, Description: address_2)
+  Column: city (Type: text, Description: city)
+  Column: state (Type: text, Description: state)
+  Column: zipcode (Type: integer, Description: zipcode)
+  Column: district_id (Type: integer, Description: district id)
+  Primary Key: client_id
+  Foreign Key: callcenterlogs.rand client -> client.client_id; client.district_id -> district.district_id; events.Client_ID -> client.client_id
+###
+【Question】
+ What is the percentage of the increase of complaints filed by the clients from New York from the year 2016 to the year 2017?
+###
+External knowledge if exists:
+percentage of increase = MULTIPLY(DIVIDE(SUBTRACT(SUM(year("Date received") = 2017), SUM(year("Date received") = 2016)), SUM(year("Date received") = 2016)), 1.0); New York refers to city = 'New York'; year("Date received") BETWEEN 2016 AND 2017;
+###
+/* Generate a MySQL CTE statement to answer, ensuring that the syntax and functions are appropriate for MySQL. All table and column names must be enclosed in ` backticks. */
+CTE query write within ```cte and ```
+Json format answer write within ```json and ```
+Answer:
+The question asks for the percentage increase in complaints filed by clients from New York from 2016 to 2017.
+To compute this, complaint records must be filtered by client location (city = 'New York') and by year of the complaint date (2016 and 2017).
+The `client` table provides `city` to identify New York clients and `client_id`,  to join with a complaints/logs table (not shown in the snippet).
+`district_id` is a foreign key in `client` that links to `district`, which in turn links to state and division, but since the question focuses on city and years, we only need to filter by `city` in `client`.
+This makes `client` relevant.
+The `district` and `state` tables are not strictly required for this computation because the external knowledge and question focus on city and years, not on district or state aggregation, so they can be dropped.
+Table `state` provides state/region but not used (city is in client); `district` has city/division but client.city is direct and sufficient per conditions;
+MySQL CTE query is:
+```cte
+WITH client_from_New_York_cte AS (
+    SELECT
+        `client_id`,
+        `city`
+    FROM
+        `client`
+    WHERE
+        `client`.`city` = 'New York'
+)
+```
+This CTE helps address part of the question by filtering and keeping only clients from New York.
+JSON format answer is:
+```json
+{{
+  "think": "The question needs complaints by New York clients in 2016 and 2017. The `client` table is relevant because it has `city` to filter New York clients and `client_id` to join with complaints. `district` and `state` are not needed and can be dropped. Generated CTE can filter and keep only clients from New York.",
+  "state": "drop_all",
+  "district": "drop_all",
+  "client": ["client_id", "city"]
+}}
+```

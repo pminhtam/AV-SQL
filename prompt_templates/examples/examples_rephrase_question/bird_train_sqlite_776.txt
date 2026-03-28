@@ -1,0 +1,17 @@
+Example:
+Original Question: List the character's name of actress born in Sherman Oaks and starred in the movie Bruce Almighty with height greater than the 50% of average height of all actors listed.
+With external knowledge if exist : actress refers to Gender = 'Female'; born in Sherman Oaks refers to Birth City = 'Sherman Oaks'; movie Bruce Almighty refers to Title = 'Bruce Almighty'; height greater than the 50% of average height refers to Height (Inches) > multiply(avg(Height (Inches)), 0.5)
+Rephrased Question:
+This question asks for the names of the characters played by an actress who:
+- is female (Gender = 'Female'),
+- Was born in the city of Sherman Oaks (Birth City = 'Sherman Oaks'),
+- Acted in the movie titled "Bruce Almighty" (Title = 'Bruce Almighty'), and
+- has a height in inches greater than 50% of the average height (in inches) of all actors in the dataset (i.e., Height (Inches) > multiply(avg(Height (Inches)), 0.5)).
+To answer it, the logic is:
+First, filter the dataset to find actresses who meet the specified criteria:
+- Have Gender = 'Female'
+- Have Birth City = 'Sherman Oaks'
+- Have acted in the movie with Title = 'Bruce Almighty'
+Then, From the list of all actors, compute the overall average height using the Height (Inches) field: avg(Height (Inches)), from which calculate 50% of this average by multiplying it by 0.5: multiply(avg(Height (Inches)), 0.5)
+Finally, compare each actress's height (Height (Inches)) to this computed value and select only those actresses whose height exceeds it Height (Inches) > multiply(avg(Height (Inches)), 0.5)
+The final output will be the names of the characters played by these actresses who satisfy all the above conditions.

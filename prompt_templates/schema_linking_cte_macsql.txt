@@ -1,0 +1,86 @@
+You are an experienced database expert. Your task is to generate a CTE (Common Table Expression) query to help answer the question based on the provided database schema and select relevant columns from the schema by generate a json format.
+
+
+You have two main tasks.
+1. Generate a CTE (Common Table Expression) query to provide all the necessary information from the provided schema to help to answer the question.
+2. Decide whether this table is relevant to the question or not and write in json format include all columns you think is needed to answer the question.
+Given a table with schema information and the task, you should think step by step and decide whether this table is related to the question.
+You should add columns that you think is related then write a Common Table Expression (CTE) query to provide all the necessary column from the table to answer the question.
+You could choose all columns if you are not sure which column is needed. Better to have too much than too little.
+You could write multiple CTE name in one ```cte block if you think it could help to answer the question.
+Better to have too much than too little.
+A common table expression, or CTE, is a temporary named result set created from a SELECT statement that can be used in a subsequent SELECT statement. Each SQL CTE is like a named query, whose result is stored in a virtual table (a CTE) to be referenced later in the main query.
+CTE have format like:
+```cte
+WITH cte_name AS (
+    SELECT column1, column2
+    FROM table_name
+    WHERE condition
+),
+cte_name2 AS (
+    SELECT column1, column2
+    FROM table_name2 JOIN table_name3 ON table_name2.col = table_name3.col
+    WHERE condition2
+)
+```
+
+Here is a high level description of the steps.
+1. Check whether the table contain information to answer the question. What information in the table can be used to answer the question.
+2. If the schema completely irrelevant to any partial of question, do not write CTE query. Do not try to create any table or column name that not exist in the provided schema.
+3. If you not sure whether the table contain information to answer the partial question, write CTE query to include all columns in the table.
+4. If table contain information, think carefully what column is needed to answer the partial question, what condition is needed to filter the data in provided schema.
+5. If you not sure whether the column is needed, you can include all of it in CTE.
+6. From this, write a Common Table Expression query to provide all the necessary information to answer the partial question.
+
+Do not need to write placeholder to answer the question or assume any information that not in the provided schema.
+The Common Table Expression query should contain all the necessary information from the provided schema to answer the partial question.
+DO not write to answer the final question, CTE
+
+Database admin instructions (violating any of the following will result is punishble to death!):
+- Do not change format of column name and table name in the provided schema.
+- Copy exactly the table name and column name from the provided schema into the CTE query.
+- Column name in SELECT clause should be exactly the same as with column_name in the provided schema. Explain column in "(" just for your understanding, do not include it in the CTE query.
+- Do not try to create any table or column name that not exist in the provided schema.
+- Keep unique column such as primary key or id in the CTE query for future.
+- Do not add any addition information of column into CTE
+- The provided database schema is not complete, try to completely answer the question could lead to error. So generate CTE is enough.
+
+
+You need to do this task by answer following steps:
+- Do the table contain information to answer the question?
+- If yes, what column is needed to answer the question and what information in the table can be used to answer the question?
+- What column correspond with this information to be used to answer the question?
+- Write a Common Table Expression query to provide all the necessary information from the provided schema to help to answer the question.
+- Write a json format contain information  to answer whether this table is relevant to question or not like:
+- If a table is completely irrelevant to the user question and evidence, mark it as "drop_all".
+- If a table is relevant to the user question and evidence, list of column name like [col_name1, col_name2] that is needed to answer the question.
+
+Write CTE (Common Table Expression) query within ```cte and ``` if exists relevant table.
+ answer json code block to answer whether this table is relevant to question or not like format:
+```json
+{{
+    "think": "think step by step to decide. Summarize what information in the table can be used to answer the question.",
+    table_name_1: [col_name1, col_name2] or "drop_all" if table is irrelevant
+    table_name_2: [col_name1, col_name2] or "drop_all" if table is irrelevant
+}}
+```
+
+{EXAMPLES_BLOCK}
+
+Ensuring that the query syntax and functions are appropriate for {DIALECT2}.
+
+###
+【Database Schema】
+{SCHEMA_STR}
+###
+【Question】
+{QUESTION_TEXT}
+###
+Hint or External knowledge if exists:
+{EXTERNAL_KNOWLEDGE_STR}
+###
+/* Generate a {DIALECT1} CTE statement to answer */
+CTE query write within ```cte and ```
+Json format answer write within ```json and ```
+Before you answer, think step by step to decide whether this table is relevant to question or not.
+Answer:

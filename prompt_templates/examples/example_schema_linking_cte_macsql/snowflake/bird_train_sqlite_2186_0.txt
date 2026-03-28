@@ -1,0 +1,69 @@
+Example:
+###
+【Database Schema】
+DATABASE_NAME : world_development_indicators . Table: world_development_indicators.CountryNotes
+  Column: Countrycode (Type: text, Description: Country code)
+  Column: Seriescode (Type: text, Description: Series code)
+  Column: Description (Type: text, Description: Description)
+  Primary Key: Countrycode, Seriescode
+  Foreign Key: CountryNotes.Countrycode -> Country.CountryCode; CountryNotes.Seriescode -> Series.SeriesCode
+
+DATABASE_NAME : world_development_indicators . Table: world_development_indicators.Footnotes
+  Column: Countrycode (Type: text, Description: Country code)
+  Column: Seriescode (Type: text, Description: Series code)
+  Column: Year (Type: text, Description: Year)
+  Column: Description (Type: text, Description: Description)
+  Primary Key: Countrycode, Seriescode, Year
+  Foreign Key: Footnotes.Countrycode -> Country.CountryCode; Footnotes.Seriescode -> Series.SeriesCode
+
+DATABASE_NAME : world_development_indicators . Table: world_development_indicators.SeriesNotes
+  Column: Seriescode (Type: text, Description: Series code)
+  Column: Year (Type: text, Description: Year)
+  Column: Description (Type: text, Description: Description)
+  Primary Key: Seriescode, Year
+  Foreign Key: SeriesNotes.Seriescode -> Series.SeriesCode
+
+DATABASE_NAME : world_development_indicators . Table: world_development_indicators.Indicators
+  Column: CountryName (Type: text, Description: Country code)
+  Column: CountryCode (Type: text, Description: Series code)
+  Column: IndicatorName (Type: text, Description: Indicator Name)
+  Column: IndicatorCode (Type: text, Description: Indicator Code)
+  Column: Year (Type: integer, Description: Year)
+  Column: Value (Type: integer, Description: Value)
+  Primary Key: CountryCode, IndicatorCode, Year
+  Foreign Key: Indicators.CountryCode -> Country.CountryCode
+###
+【Question】
+ What is the ratio between country with the highest number of infant deaths in 1971 and the lowest number of infant deaths in 1971? List the country with the highest number of infant deaths in 1971 and the lowest number of infant deaths in 1971.
+###
+External knowledge if exists:
+ratio = divide(max(value where indicatorname = 'Number of infant deaths' and year = '1971'), min(value where indicatorname = 'Number of infant deaths' and year = '1971')); the highest number of infant deaths in 1971 refers to max(value where indicatorname = 'Number of infant deaths' and year = '1971'); the lowest number of infant deaths in 1971 refers to min(value where indicatorname = 'Number of infant deaths' and year = '1971')
+###
+/* Generate a Snowflake CTE statement to answer, ensuring that the syntax and functions are appropriate for Snowflake. */
+CTE query write within ```cte and ```
+Json format answer write within ```json and ```
+Answer:
+The question requires identifying the countries with the highest and lowest number of infant deaths in 1971, along with the ratio of the highest to lowest values.
+The core data (indicator values per country and year) is stored in the "world_development_indicators.Indicators" table, which contains CountryName, CountryCode, IndicatorName, IndicatorCode, Year, and Value.
+We can filter directly on IndicatorName = 'Number of infant deaths' and Year = 1971 to get the relevant rows, then use Value for max/min computations and CountryName for country identification.
+CountryCode and IndicatorCode are kept as primary key components for uniqueness and potential joins.
+No other tables are needed: world_development_indicators.CountryNotes, world_development_indicators.Footnotes, and world_development_indicators.SeriesNotes contain only textual notes/descriptions irrelevant to numerical values or computations.
+Thus, only world_development_indicators.Indicators is relevant, providing all necessary data via the filtered CTE.
+Snowflake CTE query is:
+```cte
+WITH Indicators_filtered_condition AS (
+  SELECT "CountryName", "CountryCode", "IndicatorName", "IndicatorCode", "Year", "Value"
+  FROM "world_development_indicators.world_development_indicators.Indicators"
+  WHERE "IndicatorName" = "Number of infant deaths" AND "Year" = 1971
+)
+```
+JSON format answer is:
+```json
+{{
+  "think": "Only the 'world_development_indicators.Indicators' table contains country, indicator, year, and value data, so it is sufficient to identify the countries with the highest and lowest number of infant deaths in 1971 and to compute their ratio. The other tables (world_development_indicators.CountryNotes, world_development_indicators.Footnotes, world_development_indicators.SeriesNotes) only contain notes/descriptions and are not needed for this computation. From choosen table, the CTE query defines a filtered view of the Indicators table that keeps only: rows where IndicatorName = \"Number of infant deaths\" and Year = 1971",
+  "world_development_indicators.CountryNotes": "drop_all",
+  "world_development_indicators.Footnotes": "drop_all",
+  "world_development_indicators.SeriesNotes": "drop_all",
+  "world_development_indicators.Indicators": ["CountryName", "CountryCode", "IndicatorName", "IndicatorCode", "Year", "Value"]
+}}
+```

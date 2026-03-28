@@ -1,0 +1,40 @@
+Example:
+###
+【Database Schema】
+DATABASE_NAME : movie_platform . Table: ratings_users
+  Column: user_id (Type: integer, Description: user_id)
+  Column: rating_date_utc (Type: text, Description: rating_date_utc)
+  Column: user_trialist (Type: integer, Description: user_trialist)
+  Column: user_subscriber (Type: integer, Description: user_subscriber)
+  Column: user_avatar_image_url (Type: text, Description: user_avatar_image_url)
+  Column: user_cover_image_url (Type: text, Description: user_cover_image_url)
+  Column: user_eligible_for_trial (Type: integer, Description: user_eligible_for_trial)
+  Column: user_has_payment_method (Type: integer, Description: user_has_payment_method)
+  Foreign Key: ratings_users.user_id -> lists_users.user_id; ratings.user_id -> ratings_users.user_id
+
+###
+【Question】
+ What is the average number of followers of the lists created by the user who rated the movie "Pavee Lackeen: The Traveller Girl" on 3/27/2011 at 2:06:34 AM?
+###
+External knowledge if exists:
+average number of followers refers to AVG(list_followers); movie "Pavee Lackeen: The Traveller Girl" refers to movie_title = 'Pavee Lackeen: The Traveller Girl'; on 3/27/2011 at 2:06:34 AM refers to rating_timestamp_utc = '2011-03-27 02:06:34'
+###
+/* Generate a SQLite CTE statement to answer, ensuring that the syntax and functions are appropriate for SQLite. All table and column names must be enclosed in ` backticks. */
+CTE query write within ```cte and ```
+Json format answer write within ```json and ```
+Answer:
+The question is about the average number of followers of lists created by a specific user (the one who rated a given movie at a given timestamp).
+To solve this, we need at least: the user_id of that rater (from a ratings table), and a lists table with follower counts.
+The provided `ratings_users` table only has user-level attributes and rating_date_utc, but no movie title, rating timestamp, list information, or follower counts.
+Without movie_title, rating_timestamp_utc, or list_followers, this table cannot directly identify the specific rating event nor compute an average follower count.
+Thus, within this schema snippet alone, `ratings_users` does not provide the necessary information and is irrelevant to answering the question.
+In terms of foreign keys, `ratings_users.user_id` links to `lists_users.user_id` and `ratings.user_id`.
+Since `ratings_users` itself is not needed to answer the question, it is also unnecessary as a join bridge to `lists_users` or `ratings` table, so its foreign key column does not need to be used.
+There are no relevant tables or columns in the provided schema, so there is no valid CTE query to construct.
+JSON format answer is:
+```json
+{{
+  "think": "The question needs the rater’s `user_id`, movie title and timestamp, and list follower counts. `ratings_users` only has user attributes and `rating_date_utc`, so it cannot find that rating or any list followers. Its foreign key `user_id` is not useful here, and with this table alone no meaningful CTE can be built.",
+  "ratings_users": "drop_all"
+}}
+```

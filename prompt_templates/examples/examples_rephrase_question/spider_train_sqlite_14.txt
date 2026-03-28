@@ -1,0 +1,12 @@
+Example:
+Original Question: List the states where both the secretary of 'Treasury' department and the secretary of 'Homeland Security' were born.
+With external knowledge if exist :
+Rephrased Question:
+This question asks for the U.S. states that are birthplaces of both:
+- The secretary of the Treasury department, and
+- The secretary of the Homeland Security department.
+To answer it, the logic is:
+Identify the person who served as secretary for each of these two departments.
+Find the birth state of each secretary.
+Then, find the intersection of the birth states of the Treasury secretary and the Homeland Security secretary.
+Finally, return any state(s) that appear in both sets.

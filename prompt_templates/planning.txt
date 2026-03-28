@@ -1,0 +1,59 @@
+You are a professional data analyst responsible for inferring key information for SQL generation based on user questions and the corresponding database exploration.
+
+
+Your task is analysis the relationship between the user's question and the corresponding database schema, from that make a planning to help next step SQL generation.
+You do not need to generate SQL query now, just need to provide a detailed analysis and planning for SQL generation.
+
+# Requirements
+Thoroughly analyze the relationship between the user's question and the corresponding database schema, and summarize your findings. Specifically:
+
+### Step 1: Analyze the tables, columns provided in the database schema.
+Consider both the CTE queries and their execution results if exists to understand the data structure and relationships.
+Base on that, identify which tables and columns are relevant to the user's question.
+
+### Step 2: Break down the user's question into smaller sub-questions if necessary.
+Identify the key components of the question that need to be addressed.
+Identify the manner of provided CTEs if exists, and how they can be used to answer the question, such as filtering, aggregating, joining, etc.
+Determine if provided CTEs could help answer any sub-questions.
+
+### Step 3: Analysis of Derived Metrics and Hidden Formulas
+*   Analyze if the question requires a calculation for a metric (e.g., "profit", "age", "duration") that is not a direct column in the schema.
+*   If a formula is needed, you **must define it** using available columns. Justify your formula based on common business logic and state its **key assumptions or boundary conditions**.
+    *   **Example Formula**: `Total Price = quantity * unit_price`
+    *   **Example Justification**: Assumes `unit_price` is the price before any discounts.
+    *   **Example Boundary Condition**: Calculation should only apply to non-cancelled orders.
+*   If no additional formula is needed, skip this step.
+
+### Step 4: SQL Semantic Judgment
+* Identify the main SQL keywords that may be involved in the problem (such as `COUNT`, `GROUP BY`, `ORDER BY`, `DISTINCT`, etc.).
+* Identify the {dialect1} dialect functions required to solve the problem, and try to avoid manual calculations in subsequent SQL generation.
+* Clarify whether the problem is expected to return a **single row (e.g., aggregated statistics) or multiple rows (e.g., detailed lists)** of results to guide SQL structure design.
+* Whether to use DISTINCT depends on one point: if you are calculating the number of [entities], it is needed; if you are calculating [frequency], it is not needed. For example,
+    * **Count the number of course view records** → `COUNT(*)` (each row represents one view record)
+    * **Count the number of distinct courses viewed** → `COUNT(DISTINCT course_id)` (deduplicated by course)
+    * **Count the number of distinct students who viewed courses** → `COUNT(DISTINCT student_id)` (deduplicated by student)
+
+### Step 5: Analysis of Nested Structures
+* If there are nested fields (such as JSON, ARRAY, OBJECT, etc.), analyze their internal structure.
+* List all sub-fields within the nested fields and explain whether these fields are relevant or usable for the current question.
+
+### Step 6: Analysis of Difficulties and Pitfalls in SQL Generation
+* Based on the generation and execution results of tentative SQL, point out the **specific difficulties** in the SQL construction process (such as field ambiguity, join failures, problems with expanding nested fields, etc.).
+* Summarize the **common pitfalls or misunderstandings** that may occur in similar scenarios and propose avoidance suggestions.
+
+**Do not** generate the final SQL.
+###
+【Database Schema】
+{SCHEMA_STR}
+###
+CTE using above database with there execution results if exists.
+{CTE_STR}
+###
+【Question】
+{QUESTION_TEXT}
+###
+External knowledge if exists:
+{EXTERNAL_KNOWLEDGE_STR}
+###
+Answer:
+**Do not** generate the final SQL.

@@ -1,0 +1,40 @@
+Example:
+###
+【Database Schema】
+DATABASE_NAME : department_management . Table: xxyyzz_bigdata.department_management.management
+  Column: department_ID (Type: number, Description: department id)
+  Column: head_ID (Type: number, Description: head id)
+  Column: temporary_acting (Type: text, Description: temporary acting)
+  Primary Key: department_ID
+  Foreign Key: management.head_ID -> head.head_ID; management.department_ID -> department.Department_ID
+
+###
+【Question】
+ List the states where both the secretary of 'Treasury' department and the secretary of 'Homeland Security' were born.
+###
+External knowledge if exists:
+###
+/* Generate a Bigquery CTE statement to answer, ensuring that the syntax and functions are appropriate for Bigquery. */
+CTE query write within ```cte and ```
+Json format answer write within ```json and ```
+Answer:
+The question needs departments ('Treasury' and 'Homeland Security') and the birth states of their secretaries.
+The `xxyyzz_bigdata.department_management.management` table links department_ID to head_ID (secretary), and can act as a bridge between a department table (with department names) and a head table (with birthplace information), even though those tables are not shown here.
+Therefore, 'xxyyzz_bigdata.department_management.management' is relevant, and 'department_ID' and 'head_ID' should be kept for joins.
+Bigquery CTE query is:
+```cte
+WITH management_cte AS (
+    SELECT
+        department_ID,
+        head_ID
+    FROM
+        `xxyyzz_bigdata.department_management.management`
+)
+```
+JSON format answer is:
+```json
+{{
+  "think": "The `xxyyzz_bigdata.department_management.management` table links 'department_ID' to 'head_ID', so it can bridge to a department table (names) and a head table (birthplaces) elsewhere in the schema. Thus 'xxyyzz_bigdata.department_management.management' is relevant, and 'department_ID' and 'head_ID' should be kept for joins. The CTE can provide a clean bridge table linking each department to its head.",
+  "xxyyzz_bigdata.department_management.management": ["department_ID", "head_ID"]
+}}
+```

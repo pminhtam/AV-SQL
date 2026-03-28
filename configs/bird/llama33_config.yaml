@@ -1,0 +1,97 @@
+setting_name: bird_llama33
+
+is_continue_run: True
+
+data_file_path: 'av_sql_preprocessed_data/bird/dev_20251106-00000-of-00001.jsonl'  #
+table_file_path: 'av_sql_preprocessed_data/bird/dev_tables_example_values.json'
+
+dataset_name: "bird"
+tokenizer_name: "openai/gpt-oss-20b"
+
+n_runs : 1  # number of run all pipeline times
+n_processes: 2
+
+# SqlExecEnv
+sqlite_root_dir: "/mnt/disk2/tampm/data_text2sql/bird/dev_20240627/dev_databases/"
+
+
+log_dir: "logs/bird_llama33/" # CTEAgent : is_use_col_desc: True ; is_use_sample_rows: True
+
+# DatabaseSchemaManager
+schema_split_type : "prompting_size_limit" # "one_table", "foreign_key", "prompting_size_limit"
+#schema_split_type : "one_table" # "one_table", "foreign_key", "prompting_size_limit"
+schema_token_limit : 20000
+# TextInforManager
+is_use_sample_rows: True  # add config 2
+
+value_manager:  # config for ValueManager object
+  storage:
+    storage_type: "pkl" # "pkl" or "cassandra"
+
+    lsh_dir: "av_sql_preprocessed_data/bird/lsh_output/" # for pkl storage type
+
+    hostname: "localhost"
+    port: 9042
+  embedding_model:
+    embedding_model_type: "local"
+    embedding_model_name: 'all-MiniLM-L6-v2'
+    device: 'cuda:1'
+  lsh_top_k: 5  # optional, default 5
+  lsh_signature_size: 128 # optional, default 128
+  lsh_n_gram: 3 # optional, default 3
+  edit_similarity_threshold: 0.5
+  embedding_similarity_threshold: 0.5
+
+rephrase_agent: # add config for RephraseQuestionAgent
+  model_name: 'meta/llama-3.3-70b-instruct'
+  temperature: 1.0
+  template_path: './prompt_templates/rephrase_question.txt'
+  ####
+  num_incontext_shot: 2
+  incontext_shot_folder_path: './prompt_templates/examples/examples_rephrase_question'
+
+cte_agent:  # config for CTEAgent
+  model_name: 'meta/llama-3.3-70b-instruct'
+  temperature: 1.0
+  max_tokens: 4096
+  # Must match between template_path with json_type
+  template_path: './prompt_templates/schema_linking_cte_macsql.txt'
+  json_type: "multi_table_macsql" # "single_table_chess", "multi_table_macsql" depend on template
+  #####
+  prompt_type: "compact"  # "full", "compress_columns", "compress_tables", "compact"
+  max_fix_attempt: 5
+  run_type: "sequential" # "sequential" or "independent"
+  ####
+  num_incontext_shot: 2
+  incontext_shot_folder_path: './prompt_templates/examples/example_schema_linking_cte_macsql'
+  stream: True # stream in llm calling
+  ####
+  is_use_col_desc: True
+  is_use_sample_rows: True
+
+
+planner_agent:  # cconfig for PlannerAgent
+  model_name: 'meta/llama-3.3-70b-instruct'
+  temperature: 1.0
+  max_tokens: 2048
+  template_path: './prompt_templates/planning.txt'
+
+revise_sql:  # cconfig for PlannerAgent
+  model_name: 'meta/llama-3.3-70b-instruct'
+  temperature: 1.0
+  max_tokens: 4096
+  template_path: './prompt_templates/revise.txt'
+
+
+sql_agent:  # cconfig for SQLAgent
+  model_name: 'meta/llama-3.3-70b-instruct'
+  temperature: 1.0
+  max_tokens: 4096
+  template_path: './prompt_templates/zero_shot_with_schemalinking.txt'
+  prompt_type: "compact"
+  max_fix_attempt: 5
+  is_use_col_desc: True
+  is_use_sample_rows: True
+  stream: True # stream in llm calling
+
+# python av_sql/main.py --config_file configs/bird/llama33_config.yaml

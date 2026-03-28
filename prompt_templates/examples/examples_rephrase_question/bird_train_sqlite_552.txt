@@ -1,0 +1,9 @@
+Example:
+Original Question: Provide the production companies of the movie that has over 35% average running time per movie in 2016.
+With external knowledge if exist : production companies refers to company_name; in 2016 refers to release_date LIKE '2016%'; over 35% average running time per movie refers to divide(subtract(runtime, AVG(runtime)), AVG(runtime)) * 100 as percentage > 35
+Rephrased Question:
+This question asks for the production companies of movies released in 2016 whose running time is more than 35% above the average running time per movie.
+To answer it, the logic is:
+First, filter the data to include only movies released in 2016, which corresponds to using the release date information restricted to that year. Based on the provided external knowledge, this condition refer release dates starting with 2016 or release_date LIKE '2016%'
+Within this 2016 subset, use the running time field to compute the average running time across all movies, then, for each movie, calculate the percentage difference between its running time and this average using the formula from external knowledge divide(subtract(runtime, AVG(runtime)), AVG(runtime)) * 100  as percentage, and keep only those movies where this percentage is greater than 35.
+Finally, from the movies that satisfy this condition, return their associated production companies, where production companies are represented by the company_name field.

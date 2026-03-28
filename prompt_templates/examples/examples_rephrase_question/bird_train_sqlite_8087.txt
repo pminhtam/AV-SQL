@@ -1,0 +1,10 @@
+Example:
+Original Question: Among the universities with a score in teaching of over 90 in 2011, what is the percentage of those in the United States of America?
+With external knowledge if exist : in 2011 refers to year 2011; in teaching refers to criteria_name = 'Teaching'; score in teaching of over 90 refers to score > 90; in the United States of America refers to country_name = 'United States of America'; percentage refers to DIVIDE(COUNT(country_name = 'United States of America'), COUNT(id))
+Rephrased Question:
+This question asks for the percentage of universities that are located in the United States of America among all universities that have a teaching score greater than 90 in the year 2011, using the given external knowledge.
+To answer it, the logic is:
+Filter the records to those where:The year is 2011 (year = 2011), and the criterion is Teaching (criteria_name = 'Teaching'), and the score is greater than 90 (score > 90).
+From this filtered set: Count all such universities: COUNT(id) and Count how many of them are in the United States of America (country_name = 'United States of America').
+Compute the percentage as: DIVIDE(COUNT(country_name = 'United States of America'), COUNT(id)).
+Return this computed value as the percentage of high-teaching-score universities in 2011 that are located in the United States of America.

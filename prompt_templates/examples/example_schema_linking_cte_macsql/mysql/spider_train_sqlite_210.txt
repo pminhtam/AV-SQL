@@ -1,0 +1,60 @@
+Example:
+###
+【Database Schema】
+DATABASE_NAME : bike_1 . Table: status
+  Column: station_id (Type: number, Description: station id)
+  Column: bikes_available (Type: number, Description: bikes available)
+  Column: docks_available (Type: number, Description: docks available)
+  Column: time (Type: text, Description: time)
+  Foreign Key: status.station_id -> station.id
+
+DATABASE_NAME : bike_1 . Table: weather
+  Column: date (Type: text, Description: date)
+  Column: max_temperature_f (Type: number, Description: max temperature f)
+  Column: mean_temperature_f (Type: number, Description: mean temperature f)
+  Column: min_temperature_f (Type: number, Description: min temperature f)
+  Column: max_dew_point_f (Type: number, Description: max dew point f)
+  Column: mean_dew_point_f (Type: number, Description: mean dew point f)
+  Column: min_dew_point_f (Type: number, Description: min dew point f)
+  Column: max_humidity (Type: number, Description: max humidity)
+  Column: mean_humidity (Type: number, Description: mean humidity)
+  Column: min_humidity (Type: number, Description: min humidity)
+  Column: max_sea_level_pressure_inches (Type: number, Description: max sea level pressure inches)
+  Column: mean_sea_level_pressure_inches (Type: number, Description: mean sea level pressure inches)
+  Column: min_sea_level_pressure_inches (Type: number, Description: min sea level pressure inches)
+  Column: max_visibility_miles (Type: number, Description: max visibility miles)
+  Column: mean_visibility_miles (Type: number, Description: mean visibility miles)
+  Column: min_visibility_miles (Type: number, Description: min visibility miles)
+  Column: max_wind_Speed_mph (Type: number, Description: max wind speed mph)
+  Column: mean_wind_speed_mph (Type: number, Description: mean wind speed mph)
+  Column: max_gust_speed_mph (Type: number, Description: max gust speed mph)
+  Column: precipitation_inches (Type: number, Description: precipitation inches)
+  Column: cloud_cover (Type: number, Description: cloud cover)
+  Column: events (Type: text, Description: events)
+  Column: wind_dir_degrees (Type: number, Description: wind dir degrees)
+  Column: zip_code (Type: number, Description: zip code)
+
+###
+【Question】
+How many trips started from Mountain View city and ended at Palo Alto city?
+###
+External knowledge if exists:
+###
+/* Generate a MySQL CTE statement to answer, ensuring that the syntax and functions are appropriate for MySQL. All table and column names must be enclosed in ` backticks. */
+CTE query write within ```cte and ```
+Json format answer write within ```json and ```
+Answer:
+The question is about counting trips by start and end cities ('Mountain View' to 'Palo Alto').
+Needed data includes trip records with origin and destination stations/cities.
+The provided schema only has `status` (bike/dock availability over time by station_id) and `weather` (daily weather metrics).
+The status table only has current availability data (bikes_available, docks_available) at stations, unrelated to historical trips or cities.
+The weather table has weather metrics by zip_code, unrelated to trip routes or station cities.
+Neither table contains trip-level information, origin/destination, or city names, so they cannot directly or indirectly answer the question.
+JSON format answer is:
+```json
+{{
+  "think": "The question needs trip records with start and end cities ('Mountain View' to 'Palo Alto'). The schema here only has `status` (bike/dock availability by station) and `weather` (weather metrics), with no trip data or city names, so these tables cannot help answer the question.",
+  "status": "drop_all",
+  "weather": "drop_all"
+}}
+```

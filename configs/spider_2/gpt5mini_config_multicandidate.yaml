@@ -1,0 +1,97 @@
+setting_name: gpt5mini
+
+is_continue_run: True
+
+data_file_path: 'av_sql_preprocessed_data/spider2-snow/spider2-snow.jsonl'
+table_file_path: 'av_sql_preprocessed_data/spider2-snow/tables_preprocessed_step2_group_columns_with_example_values.json'
+external_knowledge_folder_path: "../Spider2/spider2-snow/resource/documents/"
+
+dataset_name: "spider2"
+
+n_runs : 1  #
+n_processes: 2
+
+
+# SqlExecEnv
+snowflake_credential_path: "../Spider2DecomposeQuestion2SQL/oop_cot/configs/snowflake_credential_bk.json"
+bigquery_credential_path: "../Spider2DecomposeQuestion2SQL/oop_cot/configs/bigquery_credential.json"
+sqlite_root_dir: ""
+
+
+log_dir: "logs/spider2_snow_gpt5mini_multicandidate/"  #
+
+schema_split_type : "prompting_size_limit" # "one_table", "foreign_key", "prompting_size_limit"
+schema_part_token_limit : 80000 # max tokens for each part when splitting schema
+
+is_use_sample_rows: True
+
+#value_manager:  # config for ValueManager object
+#  storage:
+#    storage_type: "cassandra" # "pkl" or "cassandra"
+#    lsh_dir: "" # for pkl storage type
+#    hostname: "100.64.241.89"
+#    port: 9042
+#  embedding_model:
+#    embedding_model_type: "local"
+#    embedding_model_name: 'all-MiniLM-L6-v2'
+#    device: 'cuda'
+#  lsh_top_k: 5  # optional, default 5
+#  lsh_signature_size: 128 # optional, default 128
+#  lsh_n_gram: 3 # optional, default 3
+#  edit_similarity_threshold: 0.4
+#  embedding_similarity_threshold: 0.4
+
+rephrase_agent: #
+  model_name: 'gpt-5-mini'
+  temperature: 1.0
+  template_path: './prompt_templates/rephrase_question.txt'
+  ####
+  num_incontext_shot: 2
+  incontext_shot_folder_path: 'prompt_templates/examples/examples_rephrase_question'
+  history_previous_run_folder: "logs/spider2_snow_gpt5mini/"
+
+cte_agent:
+  model_name: 'gpt-5-mini'
+  temperature: 1.0
+  n_shots: 3  # number of in-context examples
+  max_tokens: 4096
+  template_path: './prompt_templates/schema_linking_cte_macsql.txt'
+  json_type: "multi_table_macsql" # "single_table_chess", "multi_table_macsql" depend on template
+  prompt_type: "compact"  # "full", "compress_columns", "compress_tables", "compact"
+  max_fix_attempt: 5
+  run_type: "sequential" # "sequential" or "independent" # not use yet
+  stream: True # stream in llm calling
+  ####
+  is_use_col_desc: True
+  is_use_sample_rows: True
+  num_incontext_shot: 2
+  incontext_shot_folder_path: 'prompt_templates/examples/example_schema_linking_cte_macsql'
+  history_previous_run_folder: "logs/spider2_snow_gpt5mini/"
+
+planner_agent:  # cconfig for PlannerAgent
+  model_name: 'gpt-5-mini'
+  temperature: 1.0
+  max_tokens: 4096
+  template_path: './prompt_templates/planning.txt'
+  history_previous_run_folder: "logs/spider2_snow_gpt5mini/"
+revise_sql:  # cconfig for reviseSQL
+  model_name: 'gpt-5-mini'
+  temperature: 1.0
+  max_tokens: 2048
+  template_path: './prompt_templates/revise.txt'
+
+sql_agent:
+  model_name: 'gpt-5-mini'
+  temperature: 1.0
+  max_tokens: 4096
+  template_path: './prompt_templates/zero_shot_4_candidates.txt'
+  prompt_type: "compact"
+  max_fix_attempt: 5
+  is_use_col_desc: True
+  is_use_sample_rows: True
+  stream: True # stream in llm calling
+  multi_candidates:
+    num_response: 1
+    num_runs: 2
+
+# python av_sql/main.py --config_file configs/spider_2/gpt5mini_config_multicandidate.yaml

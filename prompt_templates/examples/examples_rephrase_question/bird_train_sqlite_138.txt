@@ -1,0 +1,10 @@
+Example:
+Original Question: For all the users who gave "A Shot in the Dark" a rating, how many percent of them is a paying subscriber?
+With external knowledge if exist : "A Shot in the Dark" refers to movie_title = 'A Shot in the Dark'; paying subscriber refers to user_has_payment_method = 1; percentage refers to DIVIDE(COUNT(user_has_payment_method = 1),COUNT(user_has_payment_method))*100
+Rephrased Question:
+This question asks for the percentage of users who are paying subscribers among all users who rated the movie "A Shot in the Dark".
+To answer it, the logic is:
+First, limit the data to only those records where users have given a rating to the movie titled "A Shot in the Dark". According to the external knowledge, this corresponds to the condition movie_title = 'A Shot in the Dark'.
+Within that filtered set, count how many of those ratings come from users who are paying subscribers. As specified in the external knowledge, users are paying subscribers could correspond to the condition user_has_payment_method = 1.
+Then, divide that count by the total number of ratings for "A Shot in the Dark" and multiply by 100 to obtain the percentage of paying subscribers among all users who rated that movie.
+Based on the external knowledge, the percentage is calculated using the formula: DIVIDE(COUNT(user_has_payment_method = 1), COUNT(users who rated "A Shot in the Dark")) * 100.

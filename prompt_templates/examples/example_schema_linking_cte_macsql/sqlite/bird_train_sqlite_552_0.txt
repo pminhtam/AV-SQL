@@ -1,0 +1,96 @@
+Example:
+###
+【Database Schema】
+DATABASE_NAME : movies_4 . Table: language_role
+  Column: role_id (Type: integer, Description: role id)
+  Column: language_role (Type: text, Description: language role)
+  Primary Key: role_id
+  Foreign Key: movie_languages.language_role_id -> language_role.role_id
+
+DATABASE_NAME : movies_4 . Table: department
+  Column: department_id (Type: integer, Description: department id)
+  Column: department_name (Type: text, Description: department name)
+  Primary Key: department_id
+  Foreign Key: movie_crew.department_id -> department.department_id
+
+DATABASE_NAME : movies_4 . Table: genre
+  Column: genre_id (Type: integer, Description: genre id)
+  Column: genre_name (Type: text, Description: genre_name)
+  Primary Key: genre_id
+  Foreign Key: movie_genres.genre_id -> genre.genre_id
+
+DATABASE_NAME : movies_4 . Table: keyword
+  Column: keyword_id (Type: integer, Description: keyword id)
+  Column: keyword_name (Type: text, Description: keyword name)
+  Primary Key: keyword_id
+
+DATABASE_NAME : movies_4 . Table: production_country
+  Column: movie_id (Type: integer, Description: mivie id)
+  Column: country_id (Type: integer, Description: country id)
+  Foreign Key: production_country.movie_id -> movie.movie_id; production_country.country_id -> country.country_id
+
+DATABASE_NAME : movies_4 . Table: movie
+  Column: movie_id (Type: integer, Description: movie id)
+  Column: title (Type: text, Description: title)
+  Column: budget (Type: integer, Description: budget)
+  Column: homepage (Type: text, Description: homepage)
+  Column: overview (Type: text, Description: overview)
+  Column: popularity (Type: real, Description: popularity)
+  Column: release_date (Type: date, Description: release date)
+  Column: revenue (Type: integer, Description: revenue)
+  Column: runtime (Type: integer, Description: runtime)
+  Column: movie_status (Type: text, Description: movie_status)
+  Column: tagline (Type: text, Description: tagline)
+  Column: vote_average (Type: real, Description: vote average)
+  Column: vote_count (Type: integer, Description: vote count)
+  Primary Key: movie_id
+  Foreign Key: movie_genres.movie_id -> movie.movie_id; movie_languages.movie_id -> movie.movie_id; movie_crew.movie_id -> movie.movie_id; production_country.movie_id -> movie.movie_id; movie_cast.movie_id -> movie.movie_id
+
+DATABASE_NAME : movies_4 . Table: movie_genres
+  Column: movie_id (Type: integer, Description: movie id)
+  Column: genre_id (Type: integer, Description: genre id)
+  Foreign Key: movie_genres.movie_id -> movie.movie_id; movie_genres.genre_id -> genre.genre_id
+
+###
+【Question】
+Provide the production companies of the movie that has over 35% average running time per movie in 2016.
+###
+External knowledge if exists:
+production companies refers to company_name; in 2016 refers to release_date LIKE '2016%'; over 35% average running time per movie refers to divide(subtract(runtime, AVG(runtime)), AVG(runtime)) * 100 as percentage > 35
+The question can be further explained in more detail as follows:
+This question asks for the production companies of movies released in 2016 whose running time is more than 35% above the average running time per movie.
+To answer it, the logic is:
+First, filter the data to include only movies released in 2016, which corresponds to using the release date information restricted to that year. Based on the provided external knowledge, this condition refer release dates starting with 2016 or release_date LIKE '2016%'
+Within this 2016 subset, use the running time field to compute the average running time across all movies, then, for each movie, calculate the percentage difference between its running time and this average using the formula from external knowledge divide(subtract(runtime, AVG(runtime)), AVG(runtime)) * 100  as percentage, and keep only those movies where this percentage is greater than 35.
+Finally, from the movies that satisfy this condition, return their associated production companies, where production companies are represented by the company_name field.
+###
+/* Generate a SQLite CTE statement to answer, ensuring that the syntax and functions are appropriate for SQLite. All table and column names must be enclosed in ` backticks. */
+CTE query write within ```cte and ```
+Json format answer write within ```json and ```
+Answer:
+The question is about movies, their release year (2016), runtime, and production companies.
+In the provided schema, the `movie` table contains `release_date` and `runtime`, which are needed to filter movies released in 2016 and compare each movie's runtime to the average runtime.
+However, there is no table or column related to production companies (such as company or company_name) in this schema snippet, so production companies cannot actually be retrieved here.
+Other tables (`language_role`, `department`, `genre`, `keyword`, `production_country`, `movie_genres`) do not provide production company information or additional fields required for the 2016 runtime calculation.
+Therefore, only the `movie` table is relevant, to compute the 2016 average runtime and identify movies whose runtime is more than 35% above that average.
+SQLite CTE query is:
+```cte
+WITH m2016 AS (
+  SELECT `movie_id`, `runtime`, `title`, `release_date`
+  FROM `movie`
+  WHERE `release_date` LIKE '2016%'
+)
+```
+JSON format answer is:
+```json
+{{
+  "think": "Relevant tables: movie (for movie_id PK, filter release year with column release_date and get information about running time per movie in column runtime). The CTE can filter movies released in 2016. Other tables do not provide production company information or additional fields required for the 2016 runtime calculation.",
+  "language_role": "drop_all",
+  "department": "drop_all",
+  "genre": "drop_all",
+  "keyword": "drop_all",
+  "production_country": "drop_all",
+  "movie": ["movie_id", "title", "release_date", "runtime"],
+  "movie_genres": "drop_all"
+}}
+```

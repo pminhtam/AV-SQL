@@ -1,0 +1,11 @@
+Example:
+Original Question: Calculate the average level difference between the Marketing editors hired by the US and non-US publishers?
+With external knowledge if exist : Marketing manager is a job description which refers to job_desc; US publisher refers publisher in the US where country = 'USA'; non-US publishers refers publisher not in the US where country! = 'USA'; job level refers to job_lvl; average level = AVG(job_lvl)
+Rephrased Question:
+This question asks for the average job level difference between editors with a Marketing manager job description who are hired by publishers in the US and those hired by publishers outside the US.
+To answer it, the logic is:
+First, identify all editors whose job description is “Marketing manager”, which corresponds to the field that stores job descriptions. Based on the external knowledge, this is represented by job_desc like "Marketing%manager%editors"
+Next, within that group, separate the editors into two sets using the publisher’s country information: one set for editors hired by publishers in the US (where country = 'USA') and another set for editors hired by publishers not in the US (where country != 'USA').
+Then, compute the average job level for each set, where job level is represented by job_lvl, and the average is calculated using AVG(job_lvl).
+Average job level for US publishers can be represented as AVG(CASE WHEN country = 'USA' THEN job_lvl END) and for non-US publishers as AVG(CASE WHEN country != 'USA' THEN job_lvl END).
+Finally, calculate the difference between these two average job levels to obtain the average level difference between Marketing manager editors hired by US publishers and those hired by non-US publishers.

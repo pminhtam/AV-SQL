@@ -1,0 +1,95 @@
+Example:
+###
+【Database Schema】
+DATABASE_NAME : retail_complains . Table: retail_complains.retail.reviews
+  Column: Date (Type: date, Description: Date)
+  Column: Stars (Type: integer, Description: Stars)
+  Column: Reviews (Type: text, Description: Reviews)
+  Column: Product (Type: text, Description: Product)
+  Column: district_id (Type: integer, Description: district_id)
+  Primary Key: retail_complains.retail.Date
+  Foreign Key: retail_complains.retail.reviews.district_id -> retail_complains.retail.district.district_id
+
+DATABASE_NAME : retail_complains . Table: retail_complains.retail.callcenterlogs
+  Column: Date received (Type: date, Description: Date received)
+  Column: Complaint ID (Type: text, Description: Complaint ID)
+  Column: rand client (Type: text, Description: rand client)
+  Column: phonefinal (Type: text, Description: phone final)
+  Column: vru+line (Type: text, Description: voice response unit line)
+  Column: call_id (Type: integer, Description: call id)
+  Column: priority (Type: integer, Description: priority)
+  Column: type (Type: text, Description: type)
+  Column: outcome (Type: text, Description: outcome)
+  Column: server (Type: text, Description: server)
+  Column: ser_start (Type: text, Description: server start)
+  Column: ser_exit (Type: text, Description: server exit)
+  Column: ser_time (Type: text, Description: server time)
+  Primary Key: retail_complains.retail.Complaint ID
+  Foreign Key: retail_complains.retail.callcenterlogs.rand client -> retail_complains.retail.client.client_id; retail_complains.retail.events.Complaint ID -> retail_complains.retail.callcenterlogs.Complaint ID
+
+DATABASE_NAME : retail_complains . Table: retail_complains.retail.events
+  Column: Date received (Type: date, Description: Date received)
+  Column: Product (Type: text, Description: Product)
+  Column: Sub-product (Type: text, Description: Sub-product)
+  Column: Issue (Type: text, Description: Issue)
+  Column: Sub-issue (Type: text, Description: Sub-issue)
+  Column: Consumer complaint narrative (Type: text, Description: Consumer complaint narrative)
+  Column: Tags (Type: text, Description: Tags)
+  Column: Consumer consent provided? (Type: text, Description: Tags Consumer consent provided?)
+  Column: Submitted via (Type: text, Description: Submitted via)
+  Column: Date sent to company (Type: text, Description: Date sent to company)
+  Column: Company response to consumer (Type: text, Description: Company response to consumer)
+  Column: Timely response? (Type: text, Description: Timely response?)
+  Column: Consumer disputed? (Type: text, Description: Consumer disputed?)
+  Column: Complaint ID (Type: text, Description: Complaint ID)
+  Column: Client_ID (Type: text, Description: Client ID)
+  Primary Key: retail_complains.retail.Complaint ID, retail_complains.retail.Client_ID
+  Foreign Key: retail_complains.retail.events.Client_ID -> retail_complains.retail.client.client_id; retail_complains.retail.events.Complaint ID -> retail_complains.retail.callcenterlogs.Complaint ID
+
+###
+【Question】
+What is the percentage of the increase of complaints filed by the clients from New York from the year 2016 to the year 2017?
+###
+External knowledge if exists:
+percentage of increase = MULTIPLY(DIVIDE(SUBTRACT(SUM(year("Date received") = 2017), SUM(year("Date received") = 2016)), SUM(year("Date received") = 2016)), 1.0); New York refers to city = 'New York'; year("Date received") BETWEEN 2016 AND 2017;
+The question can be further explained in more detail as follows:
+This question asks for the percentage increase in the number of complaints filed by clients from New York from 2016 to 2017.
+To answer it, the logic is:
+First, filter the data to include only complaints where the client’s city is New York, which corresponds to the condition city = 'New York', and restrict the records to those with received dates in the years 2016 and 2017, based on the external knowledge, this is represented by year("Date received") BETWEEN 2016 AND 2017 .
+Next, count (or sum) the number of complaints for 2016 and for 2017 separately, which corresponds to SUM(year("Date received") = 2016) and SUM(year("Date received") = 2017).
+Then, compute the difference between the 2017 and 2016 complaint counts, divide that difference by the 2016 count, and multiply by 1.0 (or 100, depending on representation) to obtain the percentage increase, based on the external knowledge, this captured by MULTIPLY(DIVIDE(SUBTRACT(SUM(year("Date received") = 2017), SUM(year("Date received") = 2016)), SUM(year("Date received") = 2016)), 1.0).
+###
+/* Generate a Snowflake CTE statement to answer, ensuring that the syntax and functions are appropriate for Snowflake. */
+CTE query write within ```cte and ```
+Json format answer write within ```json and ```
+Answer:
+The question asks for the percentage increase in complaints filed by clients from New York from 2016 to 2017.
+The "retail_complains.retail.events" table contains information about complaints filed by clients, including the "Date received" and "Client_ID".
+The column "Date received" in the "retail_complains.retail.events" table can be used to filter complaints based on the year they were received from 2016 to 2017.
+The column "Client_ID" in the "retail_complains.retail.events" table can be used to join with the others table from another part of the schema to filter clients from New York.
+Therefore, the relevant columns from the "retail_complains.retail.events" table are "Complaint ID", "Client_ID", and "Date received".
+The "retail_complains.retail.events" table is relevant to the question.
+Table "retail_complains.retail.reviews" tracks product reviews/stars, not complaints;
+Table "retail_complains.retail.callcenterlogs" logs calls with "Date received" and client link but "retail_complains.retail.events" is the primary source for filed complaints with narratives/issues.
+```cte
+WITH ny_complaints_2016_2017_cte AS (
+    SELECT
+        e."Complaint ID",
+        e."Client_ID",
+        e."Date received"
+    FROM
+        retail_complains.retail."events" AS e
+    WHERE
+        strftime('%Y', e."Date received") IN ('2016', '2017')
+)
+```
+This CTE helps to filter complaints in the years 2016 and 2017.
+JSON format answer is:
+```json
+{{
+    "think": "The table 'retail_complains.retail.events' contains information about complaints filed by clients, including the 'Date received' and 'Client_ID'. To answer the question about the percentage increase in complaints from New York clients between 2016 and 2017, we need to filter complaints based on the year they were received. Therefore, the relevant columns are 'Complaint ID', 'Client_ID', and 'Date received'. The CTE helps to filter complaints in the years 2016 and 2017.",
+    "retail_complains.retail.events": ["Complaint ID", "Client_ID", "Date received"],
+    "retail_complains.retail.callcenterlogs": "drop_all",
+    "retail_complains.retail.reviews": "drop_all"
+}}
+```

@@ -1,0 +1,66 @@
+You are doing table level schema linking. Given a table with schema information and the task, you should think step by step and decide whether this table is related to the task.
+You should answer Y/N only. If the answer is Y, you should add columns that you think is related in python list format then write a Common Table Expression (CTE) query to provide all the necessary column from the table to answer the question.
+
+Here is a high level description of the steps.
+1. Check whether the table contain information to answer the question. What information in the table can be used to answer the question.
+2. If the schema completely irrelevant to any partial of question, do not write CTE query. Do not try to create any table or column name that not exist in the provided schema.
+3. If you not sure whether the table contain information to answer the partial question, write CTE query to include all columns in the table.
+4. If table contain information, think carefully what column is needed to answer the partial question, what condition is needed to filter the data in provided schema.
+5. If you not sure whether the column is needed, you can include all of it in CTE.
+6. From this, write a Common Table Expression query to provide all the necessary information to answer the partial question.
+
+Do not need to write placeholder to answer the question or assume any information that not in the provided schema.
+The Common Table Expression query should contain all the necessary information from the provided schema to answer the partial question.
+DO not write to answer the final question, CTE
+
+Database admin instructions (voliating any of the following will result is punishble to death!):
+- Do not change format of column name and table name in the provided schema.
+- Copy exectly the table name and column name from the provided schema into the CTE query.
+- Column name in SELECT clause should be exactly the same as with column_name in the provided schema. Explain column in "(" just for your understanding, do not include it in the CTE query.
+- Do not try to create any table or column name that not exist in the provided schema.
+- Keep unique column such as primary key or id in the CTE query for future.
+- Do not add any addition information of column into CTE
+- Do not add any comment into CTE query
+- The database schema is not complete, try to answer the question could lead to error. Generate CTE is enough.
+
+
+You need to do this task by answer following steps:
+- Do the table contain information to answer the question?
+- If yes, what column is needed to answer the question and what information in the table can be used to answer the question?
+- What column correspond with this information to be used to answer the question?
+- Write a Common Table Expression query to provide all the necessary information from the provided schema to help to answer the question.
+- Write a json format contain information  to answer whether this table is relevant to question or not like:
+```json
+{{
+    "think": "reason step by step to decide wherether this table is relevant to question. If yes, summarize what information in the table can be used to answer the question.",
+    "answer": "Y or N only to answer whether this table is relevant to question or not",
+    "columns": [col_name1, col_name2]
+}}
+```
+
+
+Write CTE query within ```cte and ``` if the answer is Y.
+, then  answer json code block to answer whether this table is relevant to question or not like:
+```json
+{{
+    "think": "think step by step to decide. Summarize what information in the table can be used to answer the question.",
+    "answer": "Y or N only",
+    "columns": [col_name1, col_name2]
+}}
+```
+
+
+Database schema:
+###
+{SCHEMA_STR}
+###
+External knowledge if exists:
+{EXTERNAL_KNOWLEDGE_STR}
+You could use information from external knowledge to help you get more insights about the database and write better CTE queries.
+###
+Question: {QUESTION_TEXT}
+###
+/* Generate a {DIALECT1} CTE statement to answer, ensuring that the syntax and functions are appropriate for {DIALECT2}. */
+CTE query write within ```cte and ```
+Json format answer write within ```json and ```
+Before you answer, think step by step to decide whether this table is relevant to question or not.

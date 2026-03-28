@@ -1,0 +1,6 @@
+Example:
+Original Question: How many trips started from Mountain View city and ended at Palo Alto city?
+With external knowledge if exist :
+Rephrased Question:
+This question asks for the total number of trips whose: starting city is Mountain View, and ending city is Palo Alto.
+To answer it, filter the trip records to those with origin city = "Mountain View" and destination city = "Palo Alto", then count how many such trips there are.

@@ -1,0 +1,9 @@
+Example:
+Original Question: What is the percentage of the increase of complaints filed by the clients from New York from the year 2016 to the year 2017?
+With external knowledge if exist : percentage of increase = MULTIPLY(DIVIDE(SUBTRACT(SUM(year("Date received") = 2017), SUM(year("Date received") = 2016)), SUM(year("Date received") = 2016)), 1.0); New York refers to city = 'New York'; year("Date received") BETWEEN 2016 AND 2017;
+Rephrased Question:
+This question asks for the percentage increase in the number of complaints filed by clients from New York from 2016 to 2017.
+To answer it, the logic is:
+First, filter the data to include only complaints where the client’s city is New York, which corresponds to the condition city = 'New York', and restrict the records to those with received dates in the years 2016 and 2017, based on the external knowledge, this is represented by year("Date received") BETWEEN 2016 AND 2017 .
+Next, count (or sum) the number of complaints for 2016 and for 2017 separately, which corresponds to SUM(year("Date received") = 2016) and SUM(year("Date received") = 2017).
+Then, compute the difference between the 2017 and 2016 complaint counts, divide that difference by the 2016 count, and multiply by 1.0 (or 100, depending on representation) to obtain the percentage increase, based on the external knowledge, this captured by MULTIPLY(DIVIDE(SUBTRACT(SUM(year("Date received") = 2017), SUM(year("Date received") = 2016)), SUM(year("Date received") = 2016)), 1.0).

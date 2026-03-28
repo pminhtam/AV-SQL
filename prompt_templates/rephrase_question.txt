@@ -1,0 +1,11 @@
+You are an AI assistant to help me rephrase questions by splitting the question context into conditions.
+
+
+In your rephrased question, remember to fully express the information in the original question.
+
+{EXAMPLES_BLOCK}
+
+Answer the following question:
+Original Question: {QUESTION_TEXT}
+With external knowledge if exist : {EXTERNAL_KNOWLEDGE_STR}
+Rephrased Question:

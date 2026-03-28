@@ -1,0 +1,74 @@
+Example:
+###
+【Database Schema】
+DATABASE_NAME : movies_infor . Table: movies_4.movies.movie_company
+  Column: movie_id (Type: integer, Description: movie id)
+  Column: company_id (Type: integer, Description: company id)
+
+DATABASE_NAME : movies_infor . Table: movies_4.movies.movie_languages
+  Column: movie_id (Type: integer, Description: movie id)
+  Column: language_id (Type: integer, Description: language id)
+  Column: language_role_id (Type: integer, Description: language role id)
+  Foreign Key: movie_languages.language_role_id -> language_role.role_id; movie_languages.movie_id -> movie.movie_id; movie_languages.language_id -> language.language_id
+
+DATABASE_NAME : movies_infor . Table: movies_4.movies.production_company
+  Column: company_id (Type: integer, Description: company id)
+  Column: company_name (Type: text, Description: company name)
+  Primary Key: company_id
+
+DATABASE_NAME : movies_infor . Table: movies_4.movies.language
+  Column: language_id (Type: integer, Description: language id)
+  Column: language_code (Type: text, Description: language code)
+  Column: language_name (Type: text, Description: language name)
+  Primary Key: language_id
+  Foreign Key: movie_languages.language_id -> language.language_id
+
+DATABASE_NAME : movies_infor . Table: movies_4.movies.movie_crew
+  Column: movie_id (Type: integer, Description: movie id)
+  Column: person_id (Type: integer, Description: person id)
+  Column: department_id (Type: integer, Description: department id)
+  Column: job (Type: text, Description: job)
+  Foreign Key: movie_crew.person_id -> person.person_id; movie_crew.movie_id -> movie.movie_id; movie_crew.department_id -> department.department_id
+
+DATABASE_NAME : movies_infor . Table: movies_4.movies.movie_cast
+  Column: movie_id (Type: integer, Description: movie id)
+  Column: person_id (Type: integer, Description: person id)
+  Column: character_name (Type: text, Description: character name)
+  Column: gender_id (Type: integer, Description: gender id)
+  Column: cast_order (Type: integer, Description: cast order)
+  Foreign Key: movie_cast.person_id -> person.person_id; movie_cast.movie_id -> movie.movie_id; movie_cast.gender_id -> gender.gender_id
+
+###
+【Question】
+ Provide the production companies of the movie that has over 35% average running time per movie in 2016.
+###
+External knowledge if exists:
+production companies refers to company_name; in 2016 refers to release_date LIKE '2016%'; over 35% average running time per movie refers to divide(subtract(runtime, AVG(runtime)), AVG(runtime)) * 100 as percentage > 35
+###
+/* Generate a Bigquery CTE statement to answer, ensuring that the syntax and functions are appropriate for BigQuery. */
+CTE query write within ```cte and ```
+Json format answer write within ```json and ```
+Answer:
+In this schema snippet there is no movie table or any table contain `release_date` or `runtime` information, so 2016 filtering and runtime comparison cannot be done here and could be answered by other parts of the database schema.
+However, `movies_4.movies.production_company` contains `company_name`, which is needed to return production company names, and `movies_4.movies.movie_company` contains `movie_id` and `company_id`, which are needed to link to table contain information about movies (filtered in other parts of the schema) to production companies.
+Therefore, `movies_4.movies.movie_company` and `movies_4.movies.production_company` are relevant; other tables here are not needed for this question.
+BigQuery CTE query is:
+```cte
+WITH prod_comp AS (
+  SELECT mc.movie_id, mc.company_id, pc.company_name
+  FROM `movies_4.movies.movie_company` mc
+  JOIN `movies_4.movies.production_company` pc ON mc.company_id = pc.company_id
+)
+```
+JSON format answer is:
+```json
+{{
+  "think": "`movies_4.movies.production_company` provides `company_name` (the production company names), and `movies_4.movies.movie_company` provides `movie_id` and `company_id` to link those companies to table contained movies information in other part of schema. Thus, only `movies_4.movies.movie_company` and `movies_4.movies.production_company` are relevant; the other tables are not needed for this question. The CTE joins these two tables to prepare for retrieving production companies of relevant movies.",
+  "movies_4.movies.movie_company": ["movie_id", "company_id"],
+  "movies_4.movies.movie_languages": "drop_all",
+  "movies_4.movies.production_company": ["company_id", "company_name"],
+  "movies_4.movies.language": "drop_all",
+  "movies_4.movies.movie_crew": "drop_all",
+  "movies_4.movies.movie_cast": "drop_all"
+}}
+```
