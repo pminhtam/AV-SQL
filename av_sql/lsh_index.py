@@ -301,7 +301,6 @@ class LSHIndex:
         print(f"Existing LSH index in redis for db_id {db_id} has {count_hash} entries.")
         # return
         if count_hash > 10 :
-            # TODO need to count all value in SQL and compare with count_hash to make sure all value stored
             print(f"LSH index already exists in redis for db_id {db_id}, skipping creation.")
             return
         # import pdb; pdb.set_trace()
@@ -366,7 +365,6 @@ class LSHIndex:
         # if is_db_existing:
         #     print(f"LSH index already exists in cassandra for db_id {db_id}, skipping creation.")
         #     return
-        # TODO : load data fron .json file. Compare the number of unique values with existing in cassandra to decide skip or not
         # lsh_cluster = Cluster([host_name], port=port)
         # lsh_session = lsh_cluster.connect()
         # https://github.com/ekzhu/datasketch/blob/7b4ebacafe39c93b28058f7da9e4881cedac1c46/datasketch/storage.py#L279
@@ -846,7 +844,6 @@ class ValueManager:
         # Step 4: Filter the candidate values with lower than COEFFICIENT * max_similarity_score
         # COEFFICIENT = 0.0 means no filtering
         COEFFICIENT = 0.0
-        # TODO Write code for step 4
 
         if len(embedding_similarity_candidate_values) > 0:
             text_prompt = f"Relevant stored values for '{query_str}' in database:\n"

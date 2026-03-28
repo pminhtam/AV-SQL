@@ -653,7 +653,6 @@ class CTEAgent:
         self.final_cte['table_column_used_dict']
         :return:
         """
-        # TODO : Check consistency between json and cte : column used in cte should be in json columns list
 
         final_json_columns_dict = self.all_json_attempts[-1]['json_columns_dict']
         final_cte_table_column_used_dict = self.all_cte_attempts[-1]['table_column_used_dict']

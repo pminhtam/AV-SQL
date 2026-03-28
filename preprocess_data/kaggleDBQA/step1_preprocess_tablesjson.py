@@ -113,7 +113,6 @@ if __name__ == "__main__":
                 sample_rows[table_name].append(row_dict)
 
             # import pdb ; pdb.set_trace()
-        # TODO-DONE add example_values
         example_values = []
         max_table_id = 0
         for table_id, col in table_info["column_names_original"]:

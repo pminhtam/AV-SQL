@@ -392,8 +392,6 @@ def walk_metadata_compress(dev,proj_dir , verbose=True):
     # import pdb; pdb.set_trace()
 
     # Het step compress
-    # TODO: Group column of table based on pattern and column similarity
-
 
     #### ##############################################
 
@@ -534,9 +532,6 @@ def walk_metadata_compress(dev,proj_dir , verbose=True):
                         #     import pdb; pdb.set_trace()
                         # if len(nested_column_types_in_table) == 0 :
                         #     import pdb; pdb.set_trace()
-                        # BUG20102025
-                        # FIXME: Error when original json file do not have nested columns, nested_column_types
-                        # FIXED : 20/10/2025 4h20pm
                         """
                         Error with file :
                         - sqlite/city_legislation/cities_currencies.json
@@ -580,7 +575,6 @@ def walk_metadata_compress(dev,proj_dir , verbose=True):
 
             avg_column_per_table = total_column_count / table_count if table_count > 0 else 0
 
-            # TODO deprecated in 1106
             # if 'bigquery' in base_path:
             #     db_id = f"{project_name}.{db_id}"
             # elif 'sqlite' in base_path:
