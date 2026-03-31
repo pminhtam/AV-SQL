@@ -275,7 +275,7 @@ class QuestionInstance:
 
 class RephraseQuestionAgent:
     """
-
+    Rewriter Agent
     Agent responsible for rephrase question based on:
     - Original question text
     - External knowledge

@@ -20,6 +20,9 @@ from .sql_exec_env import SqlExecEnv
 from .utils import initialize_logger, extract_all_blocks
 
 class SQLAgent:
+    """
+    SQL generator
+    """
     def __init__(self, config: Dict[str, Any],
                  question_id: str,
                  question_text: str,
@@ -454,7 +457,7 @@ You could use CTE and their results to help you get more insights about the data
 
 class PlannerAgent:
     """
-
+    Planner
     Agent to plan the generation of SQL query
 
 
@@ -565,6 +568,7 @@ class PlannerAgent:
 
 class ReviseSQL:
     """
+    Revisor
     Revise the SQL query based on the execution result
     """
     def __init__(self, config: Dict[str, Any],

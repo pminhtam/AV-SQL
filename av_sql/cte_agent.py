@@ -27,7 +27,7 @@ from .lsh_index import ValueManager, is_number , embedding_function
 
 class CTEAgent:
     """
-
+    View generator
     Agent responsible for generating CTEs (Common Table Expressions) based on provided schema and context.
 
     """

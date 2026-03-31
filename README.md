@@ -10,6 +10,16 @@ conda activate av_sql
 pip install -r requirements.txt
 ```
 
+# Project Structure
+
+
+Agents:
+- Rewriter : [question.py](av_sql/question.py#L276) 
+- View generator : [cte_agent.py](av_sql/cte_agent.py)
+- Planner: [sql_agent.py](av_sql/sql_agent.py#L455)
+- SQL generator: [sql_agent.py](av_sql/sql_agent.py)
+- Revisor: [sql_agent.py](av_sql/sql_agent.py#L569)
+
 # Preprocess data
 
 ## Reformat data
