@@ -20,7 +20,7 @@ log_dir: "logs/bird_llama33/" # CTEAgent : is_use_col_desc: True ; is_use_sample
 # DatabaseSchemaManager
 schema_split_type : "prompting_size_limit" # "one_table", "foreign_key", "prompting_size_limit"
 #schema_split_type : "one_table" # "one_table", "foreign_key", "prompting_size_limit"
-schema_token_limit : 20000
+schema_part_token_limit : 20000
 # TextInforManager
 is_use_sample_rows: True  # add config 2
 
