@@ -1,6 +1,6 @@
+![visitors](https://visitor-badge.laobi.icu/badge?page_id=pminhtam.AV-SQL)
+
 # AV-SQL
-
-
 
 # Environment Setup
 
@@ -95,3 +95,8 @@ We would like to acknowledge the following open-source projects for their valuab
 - ReFoRCE : https://github.com/Snowflake-Labs/ReFoRCE/
 - MAC-SQL : https://github.com/wbbeyourself/MAC-SQL/
 - DSR-SQL : https://github.com/DMIRLAB-Group/DSR-SQL
+
+-----------
+**Backup Statistics**
+
+![Visitors](https://margherita-gustatory-zane.ngrok-free.dev/badge/pminhtam%2FAV-SQL.svg?ngrok-skip-browser-warning=true)
