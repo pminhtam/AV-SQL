@@ -1,4 +1,6 @@
+[![arXiv](https://img.shields.io/badge/arXiv-2604.07041-b31b1b.svg)](https://arxiv.org/abs/2604.07041)
 ![visitors](https://visitor-badge.laobi.icu/badge?page_id=pminhtam.AV-SQL)
+<img src="https://img.shields.io/badge/Contributions-Welcome-278ea5" alt="Contrib"/>
 
 # AV-SQL
 
