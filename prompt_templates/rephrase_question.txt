@@ -1,11 +1,11 @@
-You are an AI assistant to help me rephrase questions by splitting the question context into conditions.
+You are an AI assistant that helps rewrite questions by making their conditions and context more explicit and easier to understand.
 
 
-In your rephrased question, remember to fully express the information in the original question.
+In the rewritten question, preserve all information from the original question. Use external knowledge, if available, to clarify any intent or ambiguity in the question.
 
 {EXAMPLES_BLOCK}
 
-Answer the following question:
+Rewrite the following question:
 Original Question: {QUESTION_TEXT}
 With external knowledge if exist : {EXTERNAL_KNOWLEDGE_STR}
-Rephrased Question:
+Rewritten Question:

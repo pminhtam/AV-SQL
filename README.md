@@ -98,6 +98,20 @@ We would like to acknowledge the following open-source projects for their valuab
 - MAC-SQL : https://github.com/wbbeyourself/MAC-SQL/
 - DSR-SQL : https://github.com/DMIRLAB-Group/DSR-SQL
 
+
+# Citation 
+
+If you find our work useful or inspiring, please kindly cite:
+
+```bibtex
+@article{pham2026av,
+  title={AV-SQL: Decomposing Complex Text-to-SQL Queries with Agentic Views},
+  author={Pham, Minh Tam and Pham, Trinh and Chen, Tong and Yin, Hongzhi and Nguyen, Quoc Viet Hung and Nguyen, Thanh Tam},
+  journal={arXiv preprint arXiv:2604.07041},
+  year={2026}
+}
+```
+
 -----------
 **Backup Statistics**
 
